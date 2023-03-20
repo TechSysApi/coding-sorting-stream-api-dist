@@ -5,7 +5,7 @@ info:
   contact:
     name: 'erkennen codieren pakete'
     email: erkennen.codieren.pakete@post.ch
-  version: 3.0.0
+  version: 4.0.0-feature-applied-coding-rules.1
 host: 'server:8080'
 paths:
   '/{sortingUnitKey}/coding-sorting/v1/coding/transmit-final-result/{srcSystem}/{srcInstance}':
@@ -110,6 +110,11 @@ definitions:
       source:
         $ref: 'AddressSource'
         description: 'Source of the address'
+      appliedCodingRules:
+        type: array
+        items:
+          type: string
+        description: 'Coding rules which were applied to resolve the address'
       state:
         $ref: 'PersonalizedAddressState'
         description: 'Indicates state of a validated person living at a specific address'
@@ -385,16 +390,6 @@ definitions:
       confidence:
         $ref: 'Int'
         description: 'Confidence of a key (based on validation with masterdata and coding rules)'
-      reasons:
-        type: array
-        items:
-          type: string
-        description: 'Reasons which indicate why the confidence has its value'
-      appliedCodingRules:
-        type: array
-        items:
-          type: string
-        description: 'Coding rules which were applied to resolve a specific key'
     required:
       - key
       - confidence
