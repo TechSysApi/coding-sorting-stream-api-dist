@@ -5,7 +5,7 @@ info:
   contact:
     name: 'erkennen codieren pakete'
     email: erkennen.codieren.pakete@post.ch
-  version: 2.0.0
+  version: 3.0.0
 host: 'server:8080'
 paths:
   '/{sortingUnitKey}/coding-sorting/v1/coding/transmit-final-result/{srcSystem}/{srcInstance}':
@@ -414,6 +414,12 @@ definitions:
       streetKey:
         $ref: 'KeyWithConfidence'
         description: 'Identifies the street physically located on the mailpiece (street key in AMPplus)'
+      postCodeKey:
+        $ref: 'KeyWithConfidence'
+        description: 'Identifies the postcode physically located on the mailpiece (Ordnungsnummer Post (ONRP), Fremdschlüssel zu ASDP)'
+      communityKey:
+        $ref: 'KeyWithConfidence'
+        description: 'Identifies the community physically located on the mailpiece (BFS-Nr Gemeinde, Fremdschlüssel zu ASDP)'
       countryKey:
         $ref: 'KeyWithConfidence'
         description: 'Identifies the country physically located on the mailpiece (ID in the country-table in MDS)'
@@ -623,8 +629,8 @@ definitions:
         description: "Name of the streed (e.g. Musterstrasse)\n(AMPplus: Strassenbezeichnung)"
         maxLength: 60
       houseNumber:
-        $ref: 'Int'
-        description: 'House number of an address (e.g. Musterstrasse ->14<-)'
+        type: string
+        description: 'House number of an address including extension (e.g. Musterstrasse 14a)'
       poBoxNumber:
         type: string
         description: "Post Box Number which is located in an address\n(AMPplus: Postfachnummer)"
@@ -713,7 +719,7 @@ definitions:
       orderType:
         $ref: 'ServiceOrderType'
         description: 'Type of the service order. Indicates if it''s an order for a single mailpiece or if it''s an order for an address (personAddressKey)'
-      servicetype:
+      serviceType:
         $ref: 'ServiceType'
         description: 'Type of the service. The type is needed to choose the right address label type.'
       address:
@@ -765,7 +771,8 @@ definitions:
     enum:
       - FORWARD
       - RETURN
-    description: "FORWARD: mailpiece should be forwarded to a different address\nRETURN: mailpiece should be returned to the initial sender"
+      - FURTHER_PROCESSING
+    description: "FORWARD: mailpiece should be forwarded to a different address\nRETURN: mailpiece should be returned to the initial sender\nFURTHER_PROCESSING: transfer label inconclusive. Mailpiece should be sent to the last delivery office"
   ServiceRequest:
     type: object
     properties:
