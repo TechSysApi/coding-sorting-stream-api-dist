@@ -5,7 +5,7 @@ info:
   contact:
     name: 'erkennen codieren pakete'
     email: erkennen.codieren.pakete@post.ch
-  version: 4.2.0-feature-expand-service-address.1
+  version: 4.2.0-feature-expand-service-address.2
 host: 'server:8080'
 paths:
   '/{sortingUnitKey}/coding-sorting/v1/coding/transmit-final-result/{srcSystem}/{srcInstance}':
@@ -644,7 +644,7 @@ definitions:
         maxLength: 60
       countryCode:
         type: string
-        description: 'Country of the address (2-digit country code as defined in ISO 3166-1 alpha 2)'
+        description: 'ISO-Code of the country (2-digit)'
         maxLength: 2
       personAddressKey:
         type: string
