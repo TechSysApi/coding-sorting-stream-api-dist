@@ -5,7 +5,7 @@ info:
   contact:
     name: 'erkennen codieren pakete'
     email: erkennen.codieren.pakete@post.ch
-  version: 4.1.0
+  version: 4.2.0-feature-expand-service-address.1
 host: 'server:8080'
 paths:
   '/{sortingUnitKey}/coding-sorting/v1/coding/transmit-final-result/{srcSystem}/{srcInstance}':
@@ -642,6 +642,10 @@ definitions:
         type: string
         description: "City\n(AMPplus: Ort)"
         maxLength: 60
+      countryCode:
+        type: string
+        description: 'Country of the address (2-digit country code as defined in ISO 3166-1 alpha 2)'
+        maxLength: 2
       personAddressKey:
         type: string
         description: 'Identifies a person at a domiclie address (AMP-Key)'
@@ -651,6 +655,8 @@ definitions:
       streetKey:
         type: string
         description: 'Identifies the street physically located on the mailpiece (street key in AMPplus)'
+    required:
+      - countryCode
     additionalProperties: false
     description: 'The service address contains the address data that is stored in the service order'
   ServiceApplication:
