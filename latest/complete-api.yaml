@@ -5,7 +5,7 @@ info:
   contact:
     name: 'erkennen codieren pakete'
     email: erkennen.codieren.pakete@post.ch
-  version: 4.2.0-feature-expand-service-address.3
+  version: 5.0.0-feature-expand-service-address.5
 host: 'server:8080'
 paths:
   '/{sortingUnitKey}/coding-sorting/v1/coding/transmit-final-result/{srcSystem}/{srcInstance}':
@@ -366,6 +366,9 @@ definitions:
       value:
         type: string
         description: 'Value of an information carrier'
+      marker:
+        $ref: 'Marker'
+        description: 'Marker of an information carrier'
       source:
         type: array
         items:
@@ -376,8 +379,6 @@ definitions:
         description: 'Identification of the coder which scanned or typed the information carrier'
         maxLength: 50
     required:
-      - symbology
-      - value
       - source
     additionalProperties: false
     description: 'Identified and captured information carrier (e.g. barcodes, logos)'
@@ -432,6 +433,12 @@ definitions:
     enum:
       - NO_ADDRESS_ON_MAILPIECE
     description: 'NO_ADDRESS_ON_MAILPIECE = Reject because mailpiece either has no visible address, is damaged or in case it is not a Kleinware doesn''t contain a barcode.'
+  Marker:
+    type: string
+    enum:
+      - BUSINESS_REPLY
+      - INTERNATIONAL_BUSINESS_REPLY
+    description: "BUSINESS_REPLY Geschäftsantwortsendung (CICERO)\nINTERNATIONAL_BUSINESS_REPLY Internationale Geschäftsantwortsendung (CCRI & IBRS)"
   PaymentMethod:
     type: string
     enum:
@@ -638,6 +645,10 @@ definitions:
         type: string
         description: "Additional information related to a city\nmultiple purposes, see examples:\n56, 57 = Zoll, Import/Export\n60 = Briefzustellung\n61 = Postfach\n70 = Paketzustellung\n72 = Expresszustellung\n74 = Postautodienst\n75 = Kaserne"
         maxLength: 2
+      addressPostcode6:
+        type: string
+        description: "6 digit postcode\n(AMPplus: Postleitzahl)"
+        maxLength: 6
       city:
         type: string
         description: "City\n(AMPplus: Ort)"
@@ -655,8 +666,9 @@ definitions:
       streetKey:
         type: string
         description: 'Identifies the street physically located on the mailpiece (street key in AMPplus)'
-    required:
-      - countryCode
+      postCodeKey:
+        type: string
+        description: 'Identifies the postcode physically located on the mailpiece (Ordnungsnummer Post (ONRP), Fremdschlüssel zu ASDP)'
     additionalProperties: false
     description: 'The service address contains the address data that is stored in the service order'
   ServiceApplication:
