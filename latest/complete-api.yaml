@@ -5,7 +5,7 @@ info:
   contact:
     name: 'erkennen codieren pakete'
     email: erkennen.codieren.pakete@post.ch
-  version: 5.1.0
+  version: 5.2.0
 host: 'server:8080'
 paths:
   '/{sortingUnitKey}/coding-sorting/v1/coding/transmit-final-result/{srcSystem}/{srcInstance}':
@@ -621,6 +621,10 @@ definitions:
       additionalAddressLine1:
         type: string
         description: "Personalized and additional address information (e.g.c/o-Adresse)\n(AMPplus: Adresszusatz 1)"
+        maxLength: 65
+      additionalAddressLine2:
+        type: string
+        description: "Unpersonalized and not official information (e.g. Chalet Alpenblick / addressAddOn)\n(AMPplus: Adresszusatz 2)"
         maxLength: 65
       customerNumber:
         type: string
