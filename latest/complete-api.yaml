@@ -5,7 +5,7 @@ info:
   contact:
     name: 'erkennen codieren pakete'
     email: erkennen.codieren.pakete@post.ch
-  version: 5.3.0
+  version: 5.4.0-feature-expand-personalizedAddressState.1
 host: 'server:8080'
 paths:
   '/{sortingUnitKey}/coding-sorting/v1/coding/transmit-final-result/{srcSystem}/{srcInstance}':
@@ -476,8 +476,13 @@ definitions:
       - PLANNED
       - ACTIVE
       - HISTORIC_ACTIVE
+      - NIXIE_DECEASED
+      - NIXIE_RECEIVER_NOT_DETERMINED
+      - NIXIE_COMPANY_EXTINGUISHED
+      - NIXIE_FORWARDING_DEADLINE_EXPIRED
+      - NIXIE_NO_FORWARDING_ADDRESS_AVAILABLE
       - NIXIE
-    description: "PLANNED  Planned but not yet deliverable\nACTIVE   Active and deliverable\nHISTORIC_ACTIVE  historic but active and deliverable\nNIXIE    different reasons (e.g. person or company doesen't exist anymore) - not deliverable"
+    description: "PLANNED  Planned but not yet deliverable\nACTIVE   Active and deliverable\nHISTORIC_ACTIVE  historic but active and deliverable\nNIXIE_DECEASED    NIXIE because person deceased - not deliverable\nNIXIE_RECEIVER_NOT_DETERMINED    NIXIE because receiver is unknown - not deliverable\nNIXIE_COMPANY_EXTINGUISHED    NIXIE because company doesen't exist anymore - not deliverable\nNIXIE_FORWARDING_DEADLINE_EXPIRED    NIXIE because forwarding order is expired - not deliverable\nNIXIE_NO_FORWARDING_ADDRESS_AVAILABLE    NIXIE because person is relocated and no forwarding address is available - not deliverable\nNIXIE    ACTION: This enum value is no longer allowed and will be removed in the next version of this API"
   ProcessingStateType:
     type: string
     enum:
