@@ -5,7 +5,7 @@ info:
   contact:
     name: 'erkennen codieren pakete'
     email: erkennen.codieren.pakete@post.ch
-  version: 5.6.0
+  version: 5.7.0-feature-PZS-9813-multiple-services-coding.2
 host: 'server:8080'
 paths:
   '/{sortingUnitKey}/coding-sorting/v1/coding/transmit-final-result/{srcSystem}/{srcInstance}':
@@ -732,13 +732,18 @@ definitions:
     properties:
       orderId:
         type: string
-        description: 'Id of the service order from the source system'
+        description: "Id of the service order from the source system\nDEPRECATED: in favour of orders[].orderId."
       orderType:
         $ref: 'ServiceOrderType'
-        description: 'Type of the service order. Indicates if it''s an order for a single mailpiece or if it''s an order for an address (personAddressKey)'
+        description: "Type of the service order. Indicates if it's an order for a single mailpiece or if it's an order for an address (personAddressKey)\nDEPRECATED: in favour of orders[].orderType."
       type:
         $ref: 'ServiceType'
-        description: 'Type of the service. The type is needed to choose the right address label type.'
+        description: "Type of the service. The type is needed to choose the right address label type.\nDEPRECATED: in favour of orders[].serviceType."
+      orders:
+        type: array
+        items:
+          $ref: 'ServiceOrderSourceCoding'
+        description: 'Service orders used as a source for creating the service order coding.'
       changeableAddress:
         type: boolean
         description: 'Indicates whether the service address can be changed by the coding system. This applies to return addresses only. The information is based on the Frankierlizenz and passed on from there.'
@@ -760,9 +765,6 @@ definitions:
       deliveryLanguage:
         $ref: 'Language'
         description: 'Language of the distribution office that delivers the mailpiece to the service address. Used to print the address in the correct language.'
-    required:
-      - orderId
-      - orderType
     additionalProperties: false
     description: "Service data which was applied during the manual coding process.\nIncludes service data delivered by a sorting system.\nApplied products and addresses can be found directly in the context of Address and Products."
   ServiceOrderSorting:
@@ -811,6 +813,22 @@ definitions:
       - orderType
     additionalProperties: false
     description: 'Data from the service order that is relevant for the coding system to do the service coding.'
+  ServiceOrderSourceCoding:
+    type: object
+    properties:
+      orderId:
+        type: string
+        description: 'Id of the service order.'
+      orderType:
+        $ref: 'ServiceOrderType'
+        description: "Type of the service order.\r\nIndicates if it's an order for a single mailpiece or if it's an order for an address (personAddressKey)."
+      serviceType:
+        $ref: 'ServiceType'
+        description: 'Type of the service. The type is needed to choose the right address label type.'
+    required:
+      - orderId
+      - orderType
+    additionalProperties: false
   ServiceOrderType:
     type: string
     enum:
