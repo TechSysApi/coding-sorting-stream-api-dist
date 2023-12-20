@@ -5,7 +5,7 @@ info:
   contact:
     name: 'erkennen codieren pakete'
     email: erkennen.codieren.pakete@post.ch
-  version: 6.0.0
+  version: 6.1.0-Feature-codingInstructions.1
 host: 'server:8080'
 paths:
   '/{sortingUnitKey}/coding-sorting/v1/coding/transmit-final-result/{srcSystem}/{srcInstance}':
@@ -148,7 +148,10 @@ definitions:
       - ADDRESS_CODING
       - SERVICE_CODING
       - TRANSFER_CODING
-    description: "ADDRESS_CODING   The coding system needs to trigger an address coding workflow (including barcode coding)\nSERVICE_CODING   The coding system needs to trigger a service coding workflow\nTRANSFER_CODING   The coding system needs to trigger a transfer coding workflow"
+      - NO_CODING
+      - BARCODE_CODING
+      - CONFIRM_CODING
+    description: "ADDRESS_CODING   The coding system needs to trigger an address coding workflow (including barcode coding).\nSERVICE_CODING   The coding system needs to trigger a service coding workflow.\nTRANSFER_CODING  The coding system needs to trigger a transfer coding workflow.\nNO_CODING        The coding system needs to trigger a no coding workflow.\nBARCODE_CODING   The coding system needs to trigger a barcode coding workflow.\nCONFIRM_CODING   The sorting system confirms that it is ready to finalize the sorting process."
   CodingReasonCase:
     type: string
     enum:
@@ -158,7 +161,17 @@ definitions:
       - REJECTED_TECHNICAL
       - REJECTED_UNRESOLVABLE
       - NO_ADDRESS_ON_MAILPIECE
-    description: "NO_IMAGE = Technical problem: e.g. images are black, too dark / white or no information is visible. The image quality does not allow reading of the address.\nPOOR_IMAGE = Insufficient image quality or poor contrast. The image quality does not allow reading of the address.\nREJECTED_TIMEOUT = Reject due to a timeout. In this case the solution doesn't deliver a result within a specific time.\nREJECTED_TECHNICAL = Reject due to technical problems (e.g. black images, poor resolution, blurred images, only partial image build up ).\nREJECTED_UNRESOLVABLE = Reject due to unresolved mailpiece (e.g. no address visible on the image, only a part of the sender visible, recipient coding cannot be done).\nNO_ADDRESS_ON_MAILPIECE = Reject because mailpiece either has no visible address, is damaged or in case it is not a Kleinware doesn't contain a barcode."
+      - NO_MAIN_IMAGE
+      - CORRECTED_STREET
+      - CORRECTED_HOUSE_NUMBER
+      - NO_HOUSE_NUMBER
+      - CORRECTED_POSTCODE
+      - CORRECTED_CITY
+      - ADDED_CITY_ELEMENTS
+      - REJECTED_LOOPING
+      - REJECTED_SENDER_SINGLE_ORDER
+      - REJECTED_BY_USER
+    description: "NO_IMAGE = Technical problem: e.g. images are black, too dark / white or no information is visible. The image quality does not allow reading of the address.\nPOOR_IMAGE = Insufficient image quality or poor contrast. The image quality does not allow reading of the address.\nREJECTED_TIMEOUT = Reject due to a timeout. In this case the solution doesn't deliver a result within a specific time.\nREJECTED_TECHNICAL = Reject due to technical problems (e.g. black images, poor resolution, blurred images, only partial image build up ).\nREJECTED_UNRESOLVABLE = Reject due to unresolved mailpiece (e.g. no address visible on the image, only a part of the sender visible, recipient coding cannot be done).\nNO_ADDRESS_ON_MAILPIECE = Reject because mailpiece either has no visible address, is damaged or in case it is not a Kleinware doesn't contain a barcode.\nCORRECTED_STREET = Streetname was corrected due to the address in master data and due to other validated elements in the address.\nCORRECTED_HOUSE_NUMBER = House no. was not found in the master data and was corrected.\nNO_HOUSE_NUMBER = Missing house no. or house no. suffix was corrected due to the address in master data and due to other validated elements in the address.\nCORRECTED_POSTCODE = Postcode was corrected due to the address in master data and due to other validated elements in the address.\nCORRECTED_CITY = City was corrected due to the address in master data and due to other validated elements in the address.\nADDED_CITY_ELEMENTS = City was corrected due to the address in master data and due to other validated elements in the address and was adjusted with further elements (E.g. Yverdon --> Yverdon-les-Bains).\nREJECTED_LOOPING = Rejected due to looping in a center.\nREJECTED_SENDER_SINGLE_ORDER = Rejected due to a sender single order.\nREJECTED_BY_USER = Rejected by user to cancel coding (E.g. if a parcel needs to be removed from the the sorting-coding workflow)."
   CodingReason:
     type: object
     properties:
@@ -349,6 +362,16 @@ definitions:
         items:
           type: string
         description: 'Contains the list of identifiers to track a Dispobox within the country.'
+      mailpieceGlobalKey:
+        type: array
+        items:
+          type: string
+        description: "Only a single mailpiece may have the same Key and the Key is never to be reused again, allowing to identify every mailpiece.\nIt is possible to have more than one mailpieceGlobalKey per mailpiece."
+      letterTrackingId:
+        type: array
+        items:
+          type: string
+        description: 'Contains the list of identifiers to track mix mail with a data matrix code (DMC80).'
       sortingProcessId:
         type: string
         description: 'The technical identifier to track an mail item during the complete sorting process. UPU-Id is set as default.'
@@ -381,10 +404,14 @@ definitions:
       sortingUnit:
         $ref: 'SortingUnit'
         description: 'Sorting unit where the mailpiece was being processed'
+      confidence:
+        $ref: 'Int'
+        description: 'Confidence of a information carrier.'
     required:
       - producer
       - instance
       - sortingUnit
+      - confidence
     additionalProperties: false
     description: "Describes which system provided the information. This is meant to be used for diagnositcs\nand should not be used to infer any business cases."
   InformationCarrier:
@@ -1145,6 +1172,9 @@ definitions:
         items:
           $ref: 'CodingReason'
         description: 'Coding reasons that may happen during coding process. They can be used as special sorts or for a statistical purpose.'
+      finalResult:
+        type: boolean
+        description: 'Flag to define if it is a final result of the transmit-final-result.'
     required:
       - enrichmentSteps
       - maxImageBasedCodingReached
