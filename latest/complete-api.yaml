@@ -5,7 +5,7 @@ info:
   contact:
     name: 'erkennen codieren pakete'
     email: erkennen.codieren.pakete@post.ch
-  version: 6.1.0-Feature-codingInstructions.1
+  version: 6.1.0-Feature-codingInstructions.2
 host: 'server:8080'
 paths:
   '/{sortingUnitKey}/coding-sorting/v1/coding/transmit-final-result/{srcSystem}/{srcInstance}':
@@ -362,12 +362,12 @@ definitions:
         items:
           type: string
         description: 'Contains the list of identifiers to track a Dispobox within the country.'
-      mailpieceGlobalKey:
+      mailpieceGlobalKeys:
         type: array
         items:
           type: string
         description: "Only a single mailpiece may have the same Key and the Key is never to be reused again, allowing to identify every mailpiece.\nIt is possible to have more than one mailpieceGlobalKey per mailpiece."
-      letterTrackingId:
+      letterTrackingIds:
         type: array
         items:
           type: string
