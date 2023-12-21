@@ -5,7 +5,7 @@ info:
   contact:
     name: 'erkennen codieren pakete'
     email: erkennen.codieren.pakete@post.ch
-  version: 6.1.0-Feature-codingInstructions.3
+  version: 6.1.0-Feature-codingInstructions.4
 host: 'server:8080'
 paths:
   '/{sortingUnitKey}/coding-sorting/v1/coding/transmit-final-result/{srcSystem}/{srcInstance}':
@@ -125,6 +125,13 @@ definitions:
       - source
     additionalProperties: false
     description: 'Address captured by an enrichment device or delivered by a preannouncement system'
+  CodingConfirmation:
+    type: string
+    enum:
+      - NOT_REQUIRED
+      - REQUIRED
+      - CONFIRMED
+    description: "NOT_REQUIRED = No confirmation from the sorting system is required.\nREQUIRED = Confirmation from the sorting system is required.\nCONFIRMED = The required coding confirmation is confirmed from the sorting system."
   CodingDepth:
     type: string
     enum:
@@ -171,7 +178,7 @@ definitions:
       - REJECTED_LOOPING
       - REJECTED_SENDER_SINGLE_ORDER
       - REJECTED_BY_USER
-    description: "NO_IMAGE = Technical problem: e.g. images are black, too dark / white or no information is visible. The image quality does not allow reading of the address.\nPOOR_IMAGE = Insufficient image quality or poor contrast. The image quality does not allow reading of the address.\nREJECTED_TIMEOUT = Reject due to a timeout. In this case the solution doesn't deliver a result within a specific time.\nREJECTED_TECHNICAL = Reject due to technical problems (e.g. black images, poor resolution, blurred images, only partial image build up ).\nREJECTED_UNRESOLVABLE = Reject due to unresolved mailpiece (e.g. no address visible on the image, only a part of the sender visible, recipient coding cannot be done).\nNO_ADDRESS_ON_MAILPIECE = Reject because mailpiece either has no visible address, is damaged or in case it is not a Kleinware doesn't contain a barcode.\nCORRECTED_STREET = Streetname was corrected due to the address in master data and due to other validated elements in the address.\nCORRECTED_HOUSE_NUMBER = House no. was not found in the master data and was corrected.\nNO_HOUSE_NUMBER = Missing house no. or house no. suffix was corrected due to the address in master data and due to other validated elements in the address.\nCORRECTED_POSTCODE = Postcode was corrected due to the address in master data and due to other validated elements in the address.\nCORRECTED_CITY = City was corrected due to the address in master data and due to other validated elements in the address.\nADDED_CITY_ELEMENTS = City was corrected due to the address in master data and due to other validated elements in the address and was adjusted with further elements (E.g. Yverdon --> Yverdon-les-Bains).\nREJECTED_LOOPING = Rejected due to looping in a center.\nREJECTED_SENDER_SINGLE_ORDER = Rejected due to a sender single order.\nREJECTED_BY_USER = Rejected by user to cancel coding (E.g. if a parcel needs to be removed from the the sorting-coding workflow)."
+    description: "NO_IMAGE = Technical problem: e.g. images are black, too dark / white or no information is visible. The image quality does not allow reading of the address.\nPOOR_IMAGE = Insufficient image quality or poor contrast. The image quality does not allow reading of the address.\nREJECTED_TIMEOUT = Reject due to a timeout. In this case the solution doesn't deliver a result within a specific time.\nREJECTED_TECHNICAL = Reject due to technical problems (e.g. black images, poor resolution, blurred images, only partial image build up ).\nREJECTED_UNRESOLVABLE = Reject due to unresolved mailpiece (e.g. no address visible on the image, only a part of the sender visible, recipient coding cannot be done).\nNO_ADDRESS_ON_MAILPIECE = Reject because mailpiece either has no visible address, is damaged or in case it is not a Kleinware doesn't contain a barcode.\nNO_MAIN_IMAGE = Image with the main barcode is missing and/or the address ROI cannot be found.\nCORRECTED_STREET = Streetname was corrected due to the address in master data and due to other validated elements in the address.\nCORRECTED_HOUSE_NUMBER = House no. was not found in the master data and was corrected.\nNO_HOUSE_NUMBER = Missing house no. or house no. suffix was corrected due to the address in master data and due to other validated elements in the address.\nCORRECTED_POSTCODE = Postcode was corrected due to the address in master data and due to other validated elements in the address.\nCORRECTED_CITY = City was corrected due to the address in master data and due to other validated elements in the address.\nADDED_CITY_ELEMENTS = City was corrected due to the address in master data and due to other validated elements in the address and was adjusted with further elements (E.g. Yverdon --> Yverdon-les-Bains).\nREJECTED_LOOPING = Rejected due to looping in a center.\nREJECTED_SENDER_SINGLE_ORDER = Rejected due to a sender single order.\nREJECTED_BY_USER = Rejected by user to cancel coding (E.g. if a parcel needs to be removed from the the sorting-coding workflow)."
   CodingReason:
     type: object
     properties:
@@ -362,11 +369,6 @@ definitions:
         items:
           type: string
         description: 'Contains the list of identifiers to track a Dispobox within the country.'
-      mailpieceGlobalKeys:
-        type: array
-        items:
-          type: string
-        description: "Only a single mailpiece may have the same Key and the Key is never to be reused again, allowing to identify every mailpiece.\nIt is possible to have more than one mailpieceGlobalKey per mailpiece."
       letterTrackingIds:
         type: array
         items:
@@ -1172,9 +1174,9 @@ definitions:
         items:
           $ref: 'CodingReason'
         description: 'Coding reasons that may happen during coding process. They can be used as special sorts or for a statistical purpose.'
-      finalResult:
-        type: boolean
-        description: 'Flag to define if it is a final result of the transmit-final-result.'
+      confirmation:
+        $ref: 'CodingConfirmation'
+        description: 'Indicates if a confirmation for the coding process is needed from the sorting system.'
     required:
       - enrichmentSteps
       - maxImageBasedCodingReached
