@@ -5,10 +5,10 @@ info:
   contact:
     name: 'erkennen codieren pakete'
     email: erkennen.codieren.pakete@post.ch
-  version: 6.1.0-feature-provate-namespace.3
+  version: 7.0.0-feature-provate-namespace.4
 host: 'server:8080'
 paths:
-  '/{sortingUnitKey}/coding-sorting/v1/coding/transmit-final-result/{srcSystem}/{srcInstance}':
+  '/{sortingUnitKey}/coding-sorting/v1/coding/transmit-coding-result/{srcSystem}/{srcInstance}':
     post:
       summary: 'MQTT topic for sending coding data to the sorting system'
       description: 'All the related coding data of a specific coding workflow (e.g. OCR Addresscoding, VCS-coding, ...)'
@@ -34,7 +34,7 @@ paths:
           default: '01'
       responses:
         default:
-          schema: {$ref: 'TransmitFinalResultEvent'}
+          schema: {$ref: 'TransmitCodingResultEvent'}
   '/{sortingUnitKey}/coding-sorting/v1/coding/submit-action/{srcSystem}/{srcInstance}':
     post:
       summary: 'MQTT topic for coding instructions'
@@ -1039,7 +1039,7 @@ definitions:
       - REGULAR
       - EARLY
       - EVENING
-  TransmitFinalResultEvent:
+  TransmitCodingResultEvent:
     type: object
     properties:
       eventId:
@@ -1093,7 +1093,7 @@ definitions:
       - source
       - workflow
     additionalProperties: false
-    description: 'transmit-final-result event'
+    description: 'This event contains the information (adresses, information carriers, services etc.) that was coded.'
   UndeliverableReason:
     type: string
     enum:
