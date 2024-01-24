@@ -5,7 +5,7 @@ info:
   contact:
     name: 'erkennen codieren pakete'
     email: erkennen.codieren.pakete@post.ch
-  version: 7.0.0
+  version: 7.1.0-feature-appliedCodingRuleConfidence.1
 host: 'server:8080'
 paths:
   '/{sortingUnitKey}/coding-sorting/v1/coding/transmit-final-result/{srcSystem}/{srcInstance}':
@@ -526,9 +526,13 @@ definitions:
       state:
         $ref: 'PersonState'
         description: 'Indicates state of a validated person'
+      appliedCodingRuleConfidence:
+        $ref: 'Int'
+        description: "Defines the confidence of the addressee after applying the coding rules to decide if a service can be executed (e.g. notify addressee).\nThe value is either 0 or 1."
     required:
       - personAddressKey
       - state
+      - appliedCodingRuleConfidence
     additionalProperties: false
     description: 'Information related to the person of an address'
   PersonalizedAddressState:
