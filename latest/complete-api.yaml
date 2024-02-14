@@ -5,7 +5,7 @@ info:
   contact:
     name: 'erkennen codieren pakete'
     email: erkennen.codieren.pakete@post.ch
-  version: 7.0.0
+  version: 7.1.0
 host: 'server:8080'
 paths:
   '/{sortingUnitKey}/coding-sorting/v1/coding/transmit-final-result/{srcSystem}/{srcInstance}':
@@ -125,6 +125,12 @@ definitions:
       - source
     additionalProperties: false
     description: 'Address captured by an enrichment device or delivered by a preannouncement system'
+  CodedCodingMatch:
+    type: string
+    enum:
+      - PERFECT_MATCH
+      - NO_PERFECT_MATCH
+    description: "PERFECT_MATCH = The coding system is convinced that the correct addressee was coded and matched with the master data. This includes the names and the key of the addressee.\nNO_PERFECT_MATCH = The coding system is not 100% convinced that the correct addressee was found and matched with the best available result from the master data. This includes the names and the key of the addressee."
   CodingConfirmation:
     type: string
     enum:
@@ -526,9 +532,13 @@ definitions:
       state:
         $ref: 'PersonState'
         description: 'Indicates state of a validated person'
+      codingMatch:
+        $ref: 'CodedCodingMatch'
+        description: "Defines the confidence of the addressee after applying the coding rules to decide if a service can be executed (e.g. notify addressee).\nThe value is either 0 or 1."
     required:
       - personAddressKey
       - state
+      - codingMatch
     additionalProperties: false
     description: 'Information related to the person of an address'
   PersonalizedAddressState:
