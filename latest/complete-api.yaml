@@ -5,7 +5,7 @@ info:
   contact:
     name: 'Team Erkennen Codieren Pakete'
     email: erkennen.codieren.pakete@post.ch
-  version: 8.1.0-feature-external-carrier-id.2
+  version: 8.1.0-feature-external-carrier-id.3
 host: 'server:8080'
 paths:
   '/{sortingUnitKey}/coding-sorting/v1/coding/transmit-coding-result/{srcSystem}/{srcInstance}':
@@ -349,12 +349,12 @@ definitions:
         description: 'Identifier of the mailpiece from the external carrier.'
       type:
         $ref: 'ExternalCarrierType'
-        description: 'Name of external carrier.'
+        description: 'Type of the external carrier id.'
     required:
       - mailpieceId
       - type
     additionalProperties: false
-    description: 'Mailpiece identifier of external carrier. Contains the identifier and the name of the external carrier.'
+    description: 'Mailpiece identifier of external carrier. Contains the identifier and the type of the external carrier id.'
   ExternalCarrierType:
     type: string
     enum:
