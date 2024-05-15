@@ -5,7 +5,7 @@ info:
   contact:
     name: 'Team Erkennen Codieren Pakete'
     email: erkennen.codieren.pakete@post.ch
-  version: 8.0.0
+  version: 8.1.0-feature-PZS-10438.1
 host: 'server:8080'
 paths:
   '/{sortingUnitKey}/coding-sorting/v1/coding/transmit-coding-result/{srcSystem}/{srcInstance}':
@@ -1041,6 +1041,9 @@ definitions:
       sortingProcess:
         $ref: 'SortingProcess'
         description: "Defines how and where the mailpiece was sorted.\nACTION: Set as mandatory as soon as SDDM provides the information"
+      sortingCycleTriggerSourceId:
+        type: string
+        description: "The ID of the system that triggered the sorting cycle\n(e.g. ID of the DWS tunnel).\nACTION: Set as mandatory as soon as SDDM provides the information"
     required:
       - eventId
       - timestamp
