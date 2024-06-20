@@ -5,7 +5,7 @@ info:
   contact:
     name: 'Team Erkennen Codieren Pakete'
     email: erkennen.codieren.pakete@post.ch
-  version: 8.2.0-feature-coding-priority.1
+  version: 8.2.0-feature-coding-priority.2
 host: 'server:8080'
 paths:
   '/{sortingUnitKey}/coding-sorting/v1/coding/transmit-coding-result/{srcSystem}/{srcInstance}':
@@ -1034,7 +1034,7 @@ definitions:
         description: 'Required coding depth of the sorting system. Relevant in case of codingInstruction = ADDRESS_CODING'
       codingOrderPriority:
         $ref: 'Int'
-        description: "The priority of coding order. Relevant if sorting system asks for deeper coding. Higher value means higher priority.\n3 = No addressing destination found: no sorting possible\n2 = Only an addressing destination of type postcode found: manual sorting needed\n1 = Addressing destination of type district or similar found: services cannot be applied"
+        description: "The priority of coding order is relevant if sorting system asks for deeper coding. Higher value means higher priority.\nThe submitting system can use the priority to inform the coding system for which requests it needs a result more quickly.\ne.g. priority 3 when sorting system has not yet found a addressing destination (-> sorting is not possible) or priority 1 if\nthe addressing destination is available but the recipient is unknown (-> all we need for sorting, but services cannot be applied)."
       serviceOrder:
         $ref: 'ServiceOrderSorting'
         description: 'Service information that is needed for the service coding (case codingInstruction = SERVICE_CODING)'
