@@ -5,7 +5,7 @@ info:
   contact:
     name: 'Team Erkennen Codieren Pakete'
     email: erkennen.codieren.pakete@post.ch
-  version: 8.2.0
+  version: 8.3.0
 host: 'server:8080'
 paths:
   '/{sortingUnitKey}/coding-sorting/v1/coding/transmit-coding-result/{srcSystem}/{srcInstance}':
@@ -341,6 +341,24 @@ definitions:
       - instance
     additionalProperties: false
     description: "Describes which system provided the information. This is meant to be used for diagnositcs\nand should not be used to infer any business cases."
+  ExternalCarrierId:
+    type: object
+    properties:
+      mailpieceId:
+        type: string
+        description: 'Identifier of the mailpiece from the external carrier.'
+      type:
+        $ref: 'ExternalCarrierType'
+        description: 'Type of the external carrier id.'
+    required:
+      - mailpieceId
+      - type
+    additionalProperties: false
+    description: 'Mailpiece identifier of external carrier. Contains the identifier and the type of the external carrier id.'
+  ExternalCarrierType:
+    type: string
+    enum:
+      - FEDEX
   IdentifierTags:
     type: object
     properties:
@@ -384,6 +402,11 @@ definitions:
         items:
           type: string
         description: 'Contains the list of identifiers to track mix mail with a data matrix code (DMC80).'
+      externalCarrierIds:
+        type: array
+        items:
+          $ref: 'ExternalCarrierId'
+        description: 'Contains the list of identifier and type from external carriers like Fedex.'
       sortingProcessId:
         type: string
         description: 'The technical identifier to track an mail item during the complete sorting process. UPU-Id is set as default.'
