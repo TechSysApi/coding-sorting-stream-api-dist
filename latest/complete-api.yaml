@@ -5,7 +5,7 @@ info:
   contact:
     name: 'Team Erkennen Codieren Pakete'
     email: erkennen.codieren.pakete@post.ch
-  version: 8.5.0-sallinmarc-1721051068848.1
+  version: 8.5.0-sallinmarc-1721051068848.2
 host: 'server:8080'
 paths:
   '/{sortingUnitKey}/coding-sorting/v1/coding/transmit-coding-result/{srcSystem}/{srcInstance}':
@@ -1072,7 +1072,7 @@ definitions:
         description: 'If simulation is not null, this event belongs to a simulation and should not be considered productive.'
       sortingProcess:
         $ref: 'SortingProcess'
-        description: "Defines how and where the mailpiece was sorted.\nACTION: Set as mandatory as soon as SDDM provides the information"
+        description: 'Defines how and where the mailpiece was sorted.'
       sortingCycleInitiatorSourceId:
         type: string
         description: 'The ID of the system that initiated the sorting cycle. Usually, this is the "processPoint" of the submit-mailpiece (mailpiece-sorting stream API). For example "=SUS02.CLM0101+BCR01".'
@@ -1085,6 +1085,7 @@ definitions:
       - codingInstruction
       - sortingUnit
       - discardPreknowledgeData
+      - sortingProcess
       - sortingCycleInitiatorSourceId
     additionalProperties: false
   Symbology:
