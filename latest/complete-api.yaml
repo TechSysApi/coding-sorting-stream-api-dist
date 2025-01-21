@@ -5,7 +5,7 @@ info:
   contact:
     name: 'Team Erkennen Codieren Pakete'
     email: erkennen.codieren.pakete@post.ch
-  version: 8.11.0-feature-add-barcode-coding.4
+  version: 8.12.0-feature-add-barcode-coding.6
 host: 'server:8080'
 basePath: mqtt
 paths:
@@ -36,7 +36,7 @@ paths:
       responses:
         default:
           schema: {$ref: 'TransmitCodingResultEvent'}
-  '{sortingUnitKey}/coding-sorting/v1/coding/barcode-coding-result/{srcSystem}/{srcInstance}':
+  '{sortingUnitKey}/coding-sorting/v1/coding/transmit-barcode-coding-result/{srcSystem}/{srcInstance}':
     post:
       summary: 'MQTT topic for sending information carrier data to the sorting system'
       description: 'All the related coding data of a specific coding workflow'
@@ -878,6 +878,9 @@ definitions:
       simulation:
         $ref: 'Simulation'
         description: 'If simulation is not null, this event belongs to a simulation and should not be considered productive.'
+      sortingProcess:
+        $ref: 'SortingProcess'
+        description: 'Defines how and where the mailpiece was sorted.'
       sortingCycleInitiatorSourceId:
         type: string
         description: 'The ID of the system that initiated the sorting cycle. Usually, this is the "processPoint" of the submit-mailpiece (mailpiece-sorting stream API). For example "=SUS02.CLM0101+BCR01".'
@@ -887,6 +890,7 @@ definitions:
       - processingItemId
       - sortingCycleId
       - sortingUnit
+      - sortingProcess
       - sortingCycleInitiatorSourceId
     additionalProperties: false
     description: DRAFT!!
@@ -1000,6 +1004,10 @@ definitions:
       postCodeKey:
         type: string
         description: 'Identifies the postcode physically located on the mailpiece (Ordnungsnummer Post (ONRP), Fremdschlüssel zu ASDP)'
+      recipientHint:
+        type: string
+        description: "Additional information about the recipient:\ne.g., details about the original sender when returns are handled by a logistic company."
+        maxLength: 200
     additionalProperties: false
     description: 'The service address contains the address data that is stored in the service order'
   ServiceApplication:
