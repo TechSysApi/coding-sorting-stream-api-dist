@@ -39,3 +39,4 @@
 - [v8.12.0](https://TechSysApi.github.io/coding-sorting-stream-api-dist/v8.12.0/ui/?url=../complete-api.yaml)
 - [v8.13.0](https://TechSysApi.github.io/coding-sorting-stream-api-dist/v8.13.0/ui/?url=../complete-api.yaml)
 - [v8.14.0](https://TechSysApi.github.io/coding-sorting-stream-api-dist/v8.14.0/ui/?url=../complete-api.yaml)
+- [v8.15.0](https://TechSysApi.github.io/coding-sorting-stream-api-dist/v8.15.0/ui/?url=../complete-api.yaml)
