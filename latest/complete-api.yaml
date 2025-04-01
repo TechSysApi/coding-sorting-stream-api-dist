@@ -5,7 +5,7 @@ info:
   contact:
     name: 'Team Erkennen Codieren Pakete'
     email: erkennen.codieren.pakete@post.ch
-  version: 8.13.0-feature-add-mixmail-address-producer.1
+  version: 8.15.0-feature-add-mixmail-address-producer.2
 host: 'server:8080'
 paths:
   '/{sortingUnitKey}/coding-sorting/v1/coding/transmit-coding-result/{srcSystem}/{srcInstance}':
@@ -174,13 +174,11 @@ definitions:
   CodingReasonCase:
     type: string
     enum:
+      - TECHNICAL_ERROR
       - NO_IMAGE
       - POOR_IMAGE
       - REJECTED_TIMEOUT
       - REJECTED_TECHNICAL
-      - REJECTED_UNRESOLVABLE
-      - NO_ADDRESS_ON_MAILPIECE
-      - NO_MAIN_IMAGE
       - CORRECTED_STREET
       - CORRECTED_HOUSE_NUMBER
       - NO_HOUSE_NUMBER
@@ -193,9 +191,10 @@ definitions:
       - CO_ADDRESS
       - NO_RECIPIENT_IN_MASTER_DATA
       - AMBIGUOUS_ADDRESSED_RECIPIENT
+      - MULTIPLE_RECIPIENTS_IN_MASTER_DATA
       - NO_ADDRESS_ON_IMAGE
       - NO_USER_LOGGED_IN
-    description: "NO_IMAGE = Technical problem: e.g. images are black, too dark / white or no information is visible. The image quality does not allow reading of the address.\nPOOR_IMAGE = Insufficient image quality or poor contrast. The image quality does not allow reading of the address.\nREJECTED_TIMEOUT = Reject due to a timeout. In this case the solution doesn't deliver a result within a specific time.\nREJECTED_TECHNICAL = Reject due to technical problems (e.g. black images, poor resolution, blurred images, only partial image build up ).\nREJECTED_UNRESOLVABLE = Reject due to unresolved mailpiece (e.g. no address visible on the image, only a part of the sender visible, recipient coding cannot be done).\nNO_ADDRESS_ON_MAILPIECE = Reject because mailpiece either has no visible address, is damaged or in case it is not a Kleinware doesn't contain a barcode.\nNO_MAIN_IMAGE = Image with the main barcode is missing and/or the address ROI cannot be found.\nCORRECTED_STREET = Streetname was corrected due to the address in master data and due to other validated elements in the address.\nCORRECTED_HOUSE_NUMBER = House no. was not found in the master data and was corrected.\nNO_HOUSE_NUMBER = Missing house no. or house no. suffix was corrected due to the address in master data and due to other validated elements in the address.\nCORRECTED_POSTCODE = Postcode was corrected due to the address in master data and due to other validated elements in the address.\nCORRECTED_CITY = City was corrected due to the address in master data and due to other validated elements in the address.\nADDED_CITY_ELEMENTS = City was corrected due to the address in master data and due to other validated elements in the address and was adjusted with further elements (E.g. Yverdon --> Yverdon-les-Bains).\nREJECTED_LOOPING = Rejected due to looping in a center.\nREJECTED_SENDER_SINGLE_ORDER = Rejected due to a sender single order.\nREJECTED_BY_USER = Rejected by user to cancel coding (E.g. if a parcel needs to be removed from the the sorting-coding workflow).\nCO_ADDRESS = A C/O-address was found on the mailpiece.\nNO_RECIPIENT_IN_MASTER_DATA = The Recipient on the mailpiece was not found in the master data.\nAMBIGUOUS_ADDRESSED_RECIPIENT = Multiple Recipients on the mailpiece were found.\nNO_ADDRESS_ON_IMAGE = No address can be found on the image due to black or white images.\nNO_USER_LOGGED_IN = No user is logged in and therefore the enrichment has been rejected."
+    description: "TECHNICAL_ERROR = A technical error which is not captured specifically occured during caoding workflow.\nNO_IMAGE = Technical problem: e.g. images are black, too dark / white or no information is visible. The image quality does not allow reading of the address.\nPOOR_IMAGE = Insufficient image quality or poor contrast. The image quality does not allow reading of the address.\nREJECTED_TIMEOUT = Reject due to a timeout. In this case the solution doesn't deliver a result within a specific time.\nREJECTED_TECHNICAL = Reject due to technical problems (e.g. black images, poor resolution, blurred images, only partial image build up ).\nCORRECTED_STREET = Streetname was corrected due to the address in master data and due to other validated elements in the address.\nCORRECTED_HOUSE_NUMBER = House no. was not found in the master data and was corrected.\nNO_HOUSE_NUMBER = Missing house no. or house no. suffix was corrected due to the address in master data and due to other validated elements in the address.\nCORRECTED_POSTCODE = Postcode was corrected due to the address in master data and due to other validated elements in the address.\nCORRECTED_CITY = City was corrected due to the address in master data and due to other validated elements in the address.\nADDED_CITY_ELEMENTS = City was corrected due to the address in master data and due to other validated elements in the address and was adjusted with further elements (E.g. Yverdon --> Yverdon-les-Bains).\nREJECTED_LOOPING = Rejected due to looping in a center.\nREJECTED_SENDER_SINGLE_ORDER = Rejected due to a sender single order.\nREJECTED_BY_USER = Rejected by user to cancel coding (E.g. if a parcel needs to be removed from the the sorting-coding workflow).\nCO_ADDRESS = A C/O-address was found on the mailpiece.\nNO_RECIPIENT_IN_MASTER_DATA = The Recipient on the mailpiece was not found in the master data.\nMULTIPLE_RECIPIENTS_IN_MASTER_DATA = Multiple matching recipients for this address found in master data.\nAMBIGUOUS_ADDRESSED_RECIPIENT = Multiple recipients on the mailpiece were found.\nNO_ADDRESS_ON_IMAGE = No address can be found on the image due to black or white images.\nNO_USER_LOGGED_IN = No user is logged in and therefore the enrichment has been rejected."
   CodingReason:
     type: object
     properties:
@@ -529,11 +528,6 @@ definitions:
       - BULK
       - BULK_SCANNING
     description: "REJECT Component where a coder manually captures barcodes and enters address information\nBULK   Component where barcodes, weight and dimensions and address information for bulky goods are captured or entered (manual or partially automated)\nBULK_SCANNING Component where a coder manually captures barcodes and other specific information for bulky goods"
-  ManualRejectReason:
-    type: string
-    enum:
-      - NO_ADDRESS_ON_MAILPIECE
-    description: 'NO_ADDRESS_ON_MAILPIECE = Reject because mailpiece either has no visible address, is damaged or in case it is not a Kleinware doesn''t contain a barcode.'
   Marker:
     type: string
     enum:
@@ -653,12 +647,6 @@ definitions:
       - source
     additionalProperties: false
     description: 'Identified and validated product (old PRZL, "Zusatzleistung")'
-  RecognitionRejectReason:
-    type: string
-    enum:
-      - NO_IMAGE
-      - POOR_IMAGE
-    description: "NO_IMAGE = Technical problem: e.g. images are black, too dark / white or no information is visible. The image quality does not allow reading of the address.\nPOOR_IMAGE = Insufficient image quality or poor contrast. The image quality does not allow reading of the address."
   RecognitionStep:
     type: string
     enum:
@@ -667,19 +655,6 @@ definitions:
       - ADDRESS
       - ADDRESS_RETRY
     description: "INFORMATION_CARRIER Component which reads information carriers other than barcodes\nBARCODE  Component which reads / captures barcodes on an image\nADDRESS  Component which reads address elements on an image\nADDRESS_RETRY  Component which reads address elements on an image after providing information from other enrichment step (e.g. VCS ROI)"
-  RejectReason:
-    type: object
-    properties:
-      recognition:
-        $ref: 'RecognitionRejectReason'
-        description: 'Cases that may occur in OCR.'
-      video:
-        $ref: 'VideoRejectReason'
-        description: 'Cases that may occur in VCS'
-      manual:
-        $ref: 'ManualRejectReason'
-        description: 'Cases that may occur in MCS.'
-    additionalProperties: false
   ReturnReasonType:
     type: string
     enum:
@@ -940,7 +915,8 @@ definitions:
       - INTERNATIONAL
       - MILITARY
       - INSPECTION
-    description: "FORWARD = forward mailpiece to another address\nFORWARD_POBOX = forward mailpiece from a postbox to a domicile address\nDELIVERY_SLOT = deliver mailpiece on a specific weekday / at a specific time window\nRETURN = the mailpiece has to returned to the sender\nDELAYED_PICKUP = the mailpiece has to retained at the postoffice for a specific time. After this time it must be picked up by the receiver.\nDELAYED_DELIVERY = the mailpiece has to retained at the postoffice for a specific time. After this time it must be delivered to the receiver.\nINTERNATIONAL = the mailpiece must be directed an export office\nMILITARY = Military address\nINSPECTION = inspect mailpiece via customs officer or sorting specialist"
+      - FURTHER_PROCESSING
+    description: "FORWARD = forward mailpiece to another address\nFORWARD_POBOX = forward mailpiece from a postbox to a domicile address\nDELIVERY_SLOT = deliver mailpiece on a specific weekday / at a specific time window\nRETURN = the mailpiece has to returned to the sender\nDELAYED_PICKUP = the mailpiece has to retained at the postoffice for a specific time. After this time it must be picked up by the receiver.\nDELAYED_DELIVERY = the mailpiece has to retained at the postoffice for a specific time. After this time it must be delivered to the receiver.\nINTERNATIONAL = the mailpiece must be directed an export office\nMILITARY = Military address\nINSPECTION = inspect mailpiece via customs officer or sorting specialist\nFURTHER_PROCESSING = the mailpiece has to be further processed (usually in the delivery after in case of an empty transfer label, = Nachbehandlung)"
   SimulationOrigin:
     type: string
     enum:
@@ -1219,13 +1195,6 @@ definitions:
       - EXTERNAL_POSTCODE
       - EXTERNAL_ADDRESS
     description: "INTERNAL_REGION Component VCS CH: Task in the video coding system where the coder detects address region of interest (ROI) elements on an image\nINTERNAL_POSTCODE Component VCS CH: Task in the video coding system where the coder enters the postcode based on an address region of interest (ROI) image\nINTERNAL_ADDRESS Component VCS CH: Task in the video coding system where the coder enters the recipient address based on an address region of interest (ROI) image\nEXTERNAL_REGION Component VCS Offshore: Task in the video coding system where the coder detects address region of interest (ROI) elements on an image\nEXTERNAL_POSTCODE Component VCS Offshore: Task in the video coding system where the coder enters the postcode based on an address region of interest (ROI) image\nEXTERNAL_ADDRESS Component VCS Offshore: Task in the video coding system where the coder enters the recipient address based on an address region of interest (ROI) image"
-  VideoRejectReason:
-    type: string
-    enum:
-      - REJECTED_TIMEOUT
-      - REJECTED_TECHNICAL
-      - REJECTED_UNRESOLVABLE
-    description: "REJECTED_TIMEOUT = Reject due to a timeout. In this case the solution doesn't deliver a result within a specific time.\nREJECTED_TECHNICAL = Reject due to technical problems (e.g. black images, poor resolution, blurred images, only partial image build up ).\nREJECTED_UNRESOLVABLE = Reject due to unresolved mailpiece (e.g. no address visible on the image, only a part of the sender visible, recipient coding cannot be done)."
   Workflow:
     type: object
     properties:
@@ -1237,9 +1206,6 @@ definitions:
       maxImageBasedCodingReached:
         type: boolean
         description: 'Indicates if more image based coding is possible'
-      rejectReason:
-        $ref: 'RejectReason'
-        description: "Reject that may happen during coding process. They can be discharged as special sorts by the sorting system.\n\nDEPRECATED: Will be removed at the next update! Please replace it with the codingReason below."
       codingReasons:
         type: array
         items:
