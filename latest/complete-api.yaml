@@ -5,7 +5,7 @@ info:
   contact:
     name: 'Team Erkennen Codieren Pakete'
     email: erkennen.codieren.pakete@post.ch
-  version: 8.16.0
+  version: 8.17.0-feature-customs-number.1
 host: 'server:8080'
 paths:
   '/{sortingUnitKey}/coding-sorting/v1/coding/transmit-coding-result/{srcSystem}/{srcInstance}':
@@ -1091,12 +1091,13 @@ definitions:
       - EAN_13
       - EAN_128
       - I2OF5
+      - I2OF5_CUSTOMS
       - MAXI_CODE
       - PDF_417
       - QR
       - UPC_A
       - UPC_E
-    description: "NOT_RECOGNIZED The symbology is not recognized\nADDON Barcode Zusatz zu EAN und UPC\nCODABAR Barcode Codabar\nCODE_39 Barcode 39\nCODE_93 Barcode 93\nCODE_128 Barcode 128\nDATA_MATRIX Data Matrix Code\nEAN_8 International Article Number\nEAN_13 International Article Number\nEAN_128 International Article Number\nI2OF5 Interleved 2 of 5 Code\nMAXI_CODE Barcode Maxicode\nPDF_417 Barcode PDF417\nQR QR Barcode\nUPC_A Barcode Universal Product Codes (Normalversion)\nUPC_E Barcode Universal Product Codes (Kurzvariante)"
+    description: "NOT_RECOGNIZED The symbology is not recognized\nADDON Barcode Zusatz zu EAN und UPC\nCODABAR Barcode Codabar\nCODE_39 Barcode 39\nCODE_93 Barcode 93\nCODE_128 Barcode 128\nDATA_MATRIX Data Matrix Code\nEAN_8 International Article Number\nEAN_13 International Article Number\nEAN_128 International Article Number\nI2OF5 Interleved 2 of 5 Code\nI2OF5_CUSTOMS Interleved 2 of 5 Code for customs\nMAXI_CODE Barcode Maxicode\nPDF_417 Barcode PDF417\nQR QR Barcode\nUPC_A Barcode Universal Product Codes (Normalversion)\nUPC_E Barcode Universal Product Codes (Kurzvariante)"
   TaxInformation:
     type: object
     properties:
