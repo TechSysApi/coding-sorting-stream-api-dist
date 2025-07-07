@@ -5,7 +5,7 @@ info:
   contact:
     name: 'Team Erkennen Codieren Pakete'
     email: erkennen.codieren.pakete@post.ch
-  version: 8.18.0
+  version: 8.19.0-feature-add-imagesource-to-submitaction.1
 host: 'server:8080'
 paths:
   '/{sortingUnitKey}/coding-sorting/v1/coding/transmit-coding-result/{srcSystem}/{srcInstance}':
@@ -1069,6 +1069,9 @@ definitions:
       sortingCycleInitiatorSourceId:
         type: string
         description: 'The ID of the system that initiated the sorting cycle. Usually, this is the "processPoint" of the submit-mailpiece (mailpiece-sorting stream API). For example "=SUS02.CLM0101+BCR01".'
+      imageSource:
+        type: string
+        description: 'The source of the image that is related to the submit message, usually a DS or DWS tunnel.'
     required:
       - eventId
       - timestamp
