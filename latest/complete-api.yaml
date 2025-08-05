@@ -5,7 +5,7 @@ info:
   contact:
     name: 'Team Erkennen Codieren Pakete'
     email: erkennen.codieren.pakete@post.ch
-  version: 8.21.0-feature-PZS-10393-coding-reason-for-clinic.1
+  version: 8.21.0-feature-PZS-10393-coding-reason-for-clinic.2
 host: 'server:8080'
 paths:
   '/{sortingUnitKey}/coding-sorting/v1/coding/transmit-coding-result/{srcSystem}/{srcInstance}':
