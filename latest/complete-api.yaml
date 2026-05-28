@@ -5,7 +5,7 @@ info:
   contact:
     name: 'Team Erkennen Codieren Pakete'
     email: erkennen.codieren.pakete@post.ch
-  version: 10.3.0
+  version: 10.4.0-feat-add-occlusion.1
 host: 'server:8080'
 basePath: mqtt
 paths:
@@ -260,6 +260,20 @@ definitions:
       - groupId
     additionalProperties: false
     description: 'Image information used by coding system'
+  CodedOcclusion:
+    type: object
+    properties:
+      occlusion:
+        $ref: 'Int'
+        description: 'Defines the occlusion of a barcode. 0 means no occlusion, 100 means fully occluded.'
+      occluded:
+        type: boolean
+        description: 'Indicates whether the barcode is occluded. true means occluded, false means not occluded.'
+    required:
+      - occlusion
+      - occluded
+    additionalProperties: false
+    description: 'Delivers information if an informationCarrier is occluded.'
   CodingConfirmation:
     type: string
     enum:
@@ -572,6 +586,9 @@ definitions:
         description: "Confidence of an information carrier.\nThe range is from 0 to 100. 0 is the lowest possible confidence and 100 the highest."
         minimum: 0
         maximum: 100
+      occlusion:
+        $ref: 'CodedOcclusion'
+        description: "Occlusion of the information carrier.\nExpected to be provided in all cases, but optional during the transition period."
       coderId:
         type: string
         description: 'Anonymous identification of the coder who captured the information carrier'
