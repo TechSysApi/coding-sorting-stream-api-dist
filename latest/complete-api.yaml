@@ -5,7 +5,7 @@ info:
   contact:
     name: 'Team Erkennen Codieren Pakete'
     email: erkennen.codieren.pakete@post.ch
-  version: 10.4.0-feat-add-occlusion.2
+  version: 10.4.0-feat-add-occlusion.3
 host: 'server:8080'
 basePath: mqtt
 paths:
@@ -266,6 +266,8 @@ definitions:
       occlusionConfidence:
         $ref: 'Int'
         description: "Heuristic model confidence score (not a probability, not a physical measure)\nUsed for filtering and thresholding predictions between 0 and 100."
+        minimum: 0
+        maximum: 100
       occluded:
         type: boolean
         description: 'Indicates whether the barcode is occluded. true means occluded, false means not occluded.'
