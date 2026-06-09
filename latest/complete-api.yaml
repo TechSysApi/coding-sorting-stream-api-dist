@@ -5,7 +5,7 @@ info:
   contact:
     name: 'Team Erkennen Codieren Pakete'
     email: erkennen.codieren.pakete@post.ch
-  version: 10.4.0
+  version: 10.5.0-feature-addObjectCaptureId.1
 host: 'server:8080'
 basePath: mqtt
 paths:
@@ -813,6 +813,10 @@ definitions:
         type: string
         description: 'Machine specific id to identify the mailpiece during a sorting process.'
         maxLength: 32
+      objectCaptureId:
+        type: string
+        description: "A globally unique id that identifies the capture (and with it the images) that must be used for\r\ncoding this mailpiece. If no objectCaptureId is provided, the latest capture for the processingItemId should be used."
+        maxLength: 200
       sortingCycleId:
         type: string
         description: "Globally unique identifier for the sorting cylce.\r\nA sorting cycle starts when a mailpiece is submitted to a sorting unit and ends with the discharge of the mailpiece."
@@ -1221,6 +1225,10 @@ definitions:
         type: string
         description: 'machine specific id to identify the mailpiece during a sorting process'
         maxLength: 32
+      objectCaptureId:
+        type: string
+        description: "A globally unique id that identifies the capture (and with it the images) that must be used for\ncoding this mailpiece. If no objectCaptureId is provided, the latest capture for the processingItemId should be used."
+        maxLength: 200
       sortingCycleId:
         type: string
         description: "Globally unique identifier for the sorting cylce.\nA sorting cycle starts when a mailpiece is submitted to a sorting unit and end with the discharge of the mailpiece."
